@@ -16,6 +16,10 @@ class AuthError(Exception):
 
 
 def get_token_auth_header():
+    """
+    This function extract the authorization part from the header
+    in case if exist, if not a proper error will be raised!
+    """
     headers = request.headers
     if 'Authorization' not in headers:
         raise AuthError({
@@ -42,6 +46,12 @@ def get_token_auth_header():
    
 
 def check_permissions(permission, payload):
+    """
+    check if the user has the right permission to
+    access the resource or not, it checks first if 
+    permission part exist in the payload, if not error will 
+    be raised!
+    """
     if "permissions" not in payload:
         raise AuthError({
             'success': False,
@@ -58,6 +68,10 @@ def check_permissions(permission, payload):
 
 
 def verify_decode_jwt(token):
+    """
+    this function is used to verfiy if the token is 
+    valid or not
+    """
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
     unverified_header = jwt.get_unverified_header(token)
